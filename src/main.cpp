@@ -29,7 +29,7 @@ void setup() {
   sbus_tx.Begin();
 
   while(WiFi.softAPgetStationNum()==0);
-  Serial.println("Гусеница подключена");
+  Serial.println("TRACK connected");
   
 }
 
