@@ -30,6 +30,7 @@ void setup() {
 
   while(WiFi.softAPgetStationNum()==0);
   Serial.println("Гусеница подключена");
+  
 }
 
 void loop () {
@@ -56,10 +57,11 @@ void loop () {
     }
     Serial.println(buffer); 
   }
-
+  udp.begin(udpServerPort);
   udp.beginPacket(udpServerIP, udpServerPort);
   udp.printf("%s",buffer);
   udp.endPacket();
+
   buffer="";
 }
 
