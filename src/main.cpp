@@ -66,9 +66,9 @@ void loop () {
     //v1.1
     if (buffer=="1"){
       buffer+=",";
-      buffer+=String(data.ch[1]);
+      buffer+=String(data.ch[0]);
       buffer+=",";
-      buffer+=String(data.ch[2]);
+      buffer+=String(data.ch[1]);
       Serial.println(buffer);
     }else{buffer="0,992,992";}
     Serial.println(buffer);
