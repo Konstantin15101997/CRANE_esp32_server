@@ -44,10 +44,10 @@ void loop () {
       toggle_switch[i-4]= map(data.ch[i],1811,172,1,0);
     }
     //v1.0
-    //buffer = ((toggle_switch[0]==0 && toggle_switch[1]==0) || (toggle_switch[0]==1 && toggle_switch[1]==1) ) ? "0": (toggle_switch[0]==1 && toggle_switch[1]==0) ? "1": "2";
+    buffer = ((toggle_switch[0]==0 && toggle_switch[1]==0) || (toggle_switch[0]==1 && toggle_switch[1]==1) ) ? "0": (toggle_switch[0]==1 && toggle_switch[1]==0) ? "1": "2";
     
     //v1.1
-    buffer = (toggle_switch[0]==0) ? "0" : "1";
+    //buffer = (toggle_switch[0]==0) ? "0" : "1";
 
   //Устанавливаем скорость  
     //v1.0
@@ -69,8 +69,13 @@ void loop () {
       buffer+=String(data.ch[0]);
       buffer+=",";
       buffer+=String(data.ch[1]);
-      Serial.println(buffer);
-    }else{buffer="0,992,992";}
+    }else if (buffer=="2"){
+      buffer+=",";
+      buffer+=String(992);
+      buffer+=",";
+      buffer+=String(data.ch[1]);
+    }
+    else{buffer="0,992,992";}
     Serial.println(buffer);
 
   }
