@@ -1,6 +1,7 @@
 #include "sbus.h"
 #include <WiFi.h>
 #include <WiFiUdp.h>
+#include <GyverMotor2.h>
 
 //Общение по UDP
 
@@ -20,6 +21,10 @@ bfs::SbusRx sbus_rx(&Serial2, 16,  17, true);
 bfs::SbusTx sbus_tx(&Serial2, 16,  17, true); 
 /* SBUS data */
 bfs::SbusData data;
+
+GMotor2<DRIVER2WIRE> motor1(2, 16); //D4, tx - Гусеница левая
+GMotor2<DRIVER2WIRE> motor2(12, 14); //D5, D6 - Гусеника правая
+GMotor2<DRIVER2WIRE> motor3(5, 4); //D1, D2 - Вращение крана
 
 void setup() {
   Serial.begin(115200);
