@@ -22,7 +22,7 @@ bfs::SbusTx sbus_tx(&Serial2, 16,  17, true);
 /* SBUS data */
 bfs::SbusData data;
 
-GMotor motor1(DRIVER2WIRE, 15, 2);
+GMotor motor1(DRIVER2WIRE, 4, 2);
 GMotor motor2(DRIVER2WIRE, 5, 18);
 GMotor motor3(DRIVER2WIRE, 19, 21); 
 GMotor motor4(DRIVER2WIRE, 27, 14);
@@ -44,9 +44,9 @@ void setup() {
   motor1.setMode(FORWARD);
   motor2.setMode(FORWARD);
   motor3.setMode(FORWARD); 
-    motor4.setMode(FORWARD);
+  motor4.setMode(FORWARD);
   motor5.setMode(FORWARD);
-  motor6.setMode(FORWARD); 
+  motor6.setMode(FORWARD);
 }
 
 void loop () {
@@ -102,12 +102,12 @@ void loop () {
     motor5.setSpeed(speed_motor);
     motor6.setSpeed(speed_motor);
 
-  }else{
+  }
     udp.begin(udpServerPort);
     udp.beginPacket(udpServerIP, udpServerPort);
     udp.printf("%s",buffer);
     udp.endPacket();
-  }
+  
 
   buffer="";
 }
