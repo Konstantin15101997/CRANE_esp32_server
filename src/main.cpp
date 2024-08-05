@@ -64,7 +64,7 @@ void loop () {
     //buffer = ((toggle_switch[0]==0 && toggle_switch[1]==0) || (toggle_switch[0]==1 && toggle_switch[1]==1) ) ? "0": (toggle_switch[0]==1 && toggle_switch[1]==0) ? "1": "2";
     buffer = ((toggle_switch[0]+toggle_switch[1]+toggle_switch[2])!=1) ? "0": "SEARCH";
     if (buffer=="SEARCH"){
-      for (int8_t i = 0; i < 3; i++) {
+      for (int8_t i = 0; i < 2; i++) {
         if (toggle_switch[i]==1){
           buffer =String(i+1);
         }
@@ -72,32 +72,23 @@ void loop () {
     }
   //Устанавливаем скорость  
     if (buffer=="1"){
+      buffer=String(map(data.ch[0],172,1811,-255,255));
       buffer+=",";
-      buffer+=String(data.ch[0]);
+      buffer+=String(map(data.ch[1],172,1811,-255,255));
       buffer+=",";
-      buffer+=String(data.ch[1]);
-      buffer+=",";
-      buffer+=String(data.ch[2]);
-    }/*else if (buffer=="2"){
-      buffer+=",";
-      buffer+=String(992);
-      buffer+=",";
-      buffer+=String(data.ch[1]);
-    }*/
-    else if (buffer=="3"){
-      buffer+=",";
-      buffer+=String(data.ch[0]);
-      buffer+=",";
-      buffer+=String(992);
+      buffer+=String(map(data.ch[2],172,1811,-255,255));
+    }
+    else if (buffer=="2"){
+      buffer+=" - mode CRANE";
       speed_motor=map(data.ch[0],172,1811,-255,255);
       speed_motor = (speed_motor>=-10 && speed_motor<=10) ? 0 : speed_motor;
     }
-    else{buffer="0,992,992,992";}
+    else{buffer="0,0,0";}
     Serial.println(buffer);
 
   }
-  //Serial.println(buffer[0]);
-  if (buffer.startsWith("3")){
+
+  if (buffer.startsWith("2")){
     Serial.println(speed_motor);
 
     motor1.setSpeed(speed_motor);
