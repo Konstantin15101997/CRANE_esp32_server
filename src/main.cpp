@@ -76,12 +76,15 @@ void loop () {
       buffer+=String(data.ch[0]);
       buffer+=",";
       buffer+=String(data.ch[1]);
-    }else if (buffer=="2"){
+      buffer+=",";
+      buffer+=String(data.ch[2]);
+    }/*else if (buffer=="2"){
       buffer+=",";
       buffer+=String(992);
       buffer+=",";
       buffer+=String(data.ch[1]);
-    }else if (buffer=="3"){
+    }*/
+    else if (buffer=="3"){
       buffer+=",";
       buffer+=String(data.ch[0]);
       buffer+=",";
@@ -89,7 +92,7 @@ void loop () {
       speed_motor=map(data.ch[0],172,1811,-255,255);
       speed_motor = (speed_motor>=-10 && speed_motor<=10) ? 0 : speed_motor;
     }
-    else{buffer="0,992,992";}
+    else{buffer="0,992,992,992";}
     Serial.println(buffer);
 
   }
