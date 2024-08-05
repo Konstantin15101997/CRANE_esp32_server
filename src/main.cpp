@@ -22,12 +22,14 @@ bfs::SbusTx sbus_tx(&Serial2, 16,  17, true);
 /* SBUS data */
 bfs::SbusData data;
 
-GMotor motor1(DRIVER2WIRE, 4, 2);
-GMotor motor2(DRIVER2WIRE, 5, 18);
+
+//Моторы обозначены по расположению пинов подключения на плате, слева направо 
+GMotor motor1(DRIVER2WIRE, 4, 2); 
+GMotor motor2(DRIVER2WIRE, 22, 18); 
 GMotor motor3(DRIVER2WIRE, 19, 21); 
-GMotor motor4(DRIVER2WIRE, 27, 14);
-GMotor motor5(DRIVER2WIRE, 32, 33);
-GMotor motor6(DRIVER2WIRE, 25, 26); 
+GMotor motor4(DRIVER2WIRE, 32, 33);
+GMotor motor5(DRIVER2WIRE, 25, 26);
+GMotor motor6(DRIVER2WIRE, 27, 12);
 
 int speed_motor;
 
