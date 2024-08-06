@@ -46,17 +46,17 @@ void setup() {
   Serial.println("TRACK connected");*/
 
   motor1.setMode(FORWARD);
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
   motor2.setMode(FORWARD);
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
   motor3.setMode(FORWARD); 
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
   motor4.setMode(FORWARD);
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
   motor5.setMode(FORWARD);
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
   motor6.setMode(FORWARD);
-  motor1.setSmoothSpeed(20);
+  motor1.setSmoothSpeed(10);
 }
 
 void loop () {
@@ -91,7 +91,12 @@ void loop () {
 
         speed_motor=map(data.ch[0],172,1811,-255,255);
         speed_motor = (speed_motor>=-10 && speed_motor<=10) ? 0 : speed_motor;
-        number_motor= (map(data.ch[6], 172,1811,0,2)==0) ? 5 : (map(data.ch[6], 172,1811,0,3)== 1) ? 6 : 7; // 7 - это 5 и 6 одновременно 
+
+        number_motor= (map(data.ch[6], 172,1811,0,2)==0) ? 0 : (map(data.ch[6], 172,1811,0,2)== 1) ? 1 : 2; 
+        if (number_motor==0){
+          number_motor= (map(data.ch[7], 172,1811,0,2)==0) ? 5 : (map(data.ch[7], 172,1811,0,2)== 1) ? 6 : 7; // 7 - это 5 и 6 одновременно 
+        }
+    
       }
     }else{
       buffer = "0,0,0";
@@ -108,15 +113,30 @@ void loop () {
     buffer="";
   }else if (mode==2){
     Serial.println(number_motor);
-    if (number_motor == 5){
-      motor5.smoothTick(speed_motor);
-    }else if (number_motor == 6){
-      motor6.smoothTick(speed_motor);
+    if (number_motor == 0){
+      Stop();
     }else{
-      motor5.smoothTick(speed_motor);
-      motor6.smoothTick(speed_motor);
+      if (number_motor == 1){
+        motor5.smoothTick(speed_motor);
+      }else if (number_motor == 6){
+        motor6.smoothTick(speed_motor);
+      }else{
+        motor5.smoothTick(speed_motor);
+        motor6.smoothTick(speed_motor);
+      }
     }
   }
   
+}
+
+void Stop(){
+  motor1.smoothTick(0);
+  motor2.smoothTick(0);
+  motor3.smoothTick(0);
+  motor4.smoothTick(0);
+  motor5.smoothTick(0);
+  motor6.smoothTick(0);
+
+  buffer = "0,0,0";
 }
 
