@@ -31,6 +31,8 @@ GMotor motor4(DRIVER2WIRE, 32, 33);
 GMotor motor5(DRIVER2WIRE, 25, 26);
 GMotor motor6(DRIVER2WIRE, 27, 12);
 
+byte mode;
+byte number_motor;
 int speed_motor;
 
 void setup() {
@@ -39,16 +41,22 @@ void setup() {
   /* Begin the SBUS communication */
   sbus_rx.Begin();
   sbus_tx.Begin();
-
+  udp.begin(udpServerPort);
   /*while(WiFi.softAPgetStationNum()==0);
   Serial.println("TRACK connected");*/
 
   motor1.setMode(FORWARD);
+  motor1.setSmoothSpeed(20);
   motor2.setMode(FORWARD);
+  motor1.setSmoothSpeed(20);
   motor3.setMode(FORWARD); 
+  motor1.setSmoothSpeed(20);
   motor4.setMode(FORWARD);
+  motor1.setSmoothSpeed(20);
   motor5.setMode(FORWARD);
+  motor1.setSmoothSpeed(20);
   motor6.setMode(FORWARD);
+  motor1.setSmoothSpeed(20);
 }
 
 void loop () {
@@ -61,50 +69,54 @@ void loop () {
     for (int8_t i = 4; i < 8; i++) {
       toggle_switch[i-4]= map(data.ch[i],1811,172,1,0);
     }
-    //buffer = ((toggle_switch[0]==0 && toggle_switch[1]==0) || (toggle_switch[0]==1 && toggle_switch[1]==1) ) ? "0": (toggle_switch[0]==1 && toggle_switch[1]==0) ? "1": "2";
-    buffer = ((toggle_switch[0]+toggle_switch[1]+toggle_switch[2])!=1) ? "0": "SEARCH";
-    if (buffer=="SEARCH"){
+    bool start = ((toggle_switch[0]+toggle_switch[1])!=1) ? 0 : 1;
+   
+    if (start==1){
       for (int8_t i = 0; i < 2; i++) {
         if (toggle_switch[i]==1){
-          buffer =String(i+1);
+          mode = i+1;
         }
       }
-    }
-  //Устанавливаем скорость  
-    if (buffer=="1"){
-      buffer=String(map(data.ch[0],172,1811,-255,255));
-      buffer+=",";
-      buffer+=String(map(data.ch[1],172,1811,-255,255));
-      buffer+=",";
-      buffer+=String(map(data.ch[2],172,1811,-255,255));
-    }
-    else if (buffer=="2"){
-      buffer+=" - mode CRANE";
-      speed_motor=map(data.ch[0],172,1811,-255,255);
-      speed_motor = (speed_motor>=-10 && speed_motor<=10) ? 0 : speed_motor;
-    }
-    else{buffer="0,0,0";}
-    Serial.println(buffer);
+      if (mode == 1){  // режим TRACK
+        speed_motor = 0;
+
+        buffer=String(map(data.ch[0],172,1811,-255,255));
+        buffer+=",";
+        buffer+=String(map(data.ch[1],172,1811,-255,255));
+        buffer+=",";
+        buffer+=String(map(data.ch[2],172,1811,-255,255));
+      }
+      else if (mode == 2){ // режим CRANE
+        buffer = "0,0,0";
+
+        speed_motor=map(data.ch[0],172,1811,-255,255);
+        speed_motor = (speed_motor>=-10 && speed_motor<=10) ? 0 : speed_motor;
+        number_motor= (map(data.ch[6], 172,1811,0,2)==0) ? 5 : (map(data.ch[6], 172,1811,0,3)== 1) ? 6 : 7; // 7 - это 5 и 6 одновременно 
+      }
+    }else{
+      buffer = "0,0,0";
+      speed_motor = 0;
+      mode = 0;
+    }  
 
   }
 
-  if (buffer.startsWith("2")){
-    Serial.println(speed_motor);
-
-    motor1.setSpeed(speed_motor);
-    motor2.setSpeed(speed_motor);
-    motor3.setSpeed(speed_motor);
-    motor4.setSpeed(speed_motor);
-    motor5.setSpeed(speed_motor);
-    motor6.setSpeed(speed_motor);
-
-  }
-    udp.begin(udpServerPort);
+  if (mode==1){
     udp.beginPacket(udpServerIP, udpServerPort);
     udp.printf("%s",buffer);
     udp.endPacket();
+    buffer="";
+  }else if (mode==2){
+    Serial.println(number_motor);
+    if (number_motor == 5){
+      motor5.smoothTick(speed_motor);
+    }else if (number_motor == 6){
+      motor6.smoothTick(speed_motor);
+    }else{
+      motor5.smoothTick(speed_motor);
+      motor6.smoothTick(speed_motor);
+    }
+  }
   
-
-  buffer="";
 }
 
