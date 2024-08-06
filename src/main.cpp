@@ -112,7 +112,7 @@ void loop () {
       }
     }else{
       buffer = "0,0,0";
-      speed_motor = 0;
+      Stop();
       mode = 0;
     }  
 
