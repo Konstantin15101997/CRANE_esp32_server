@@ -57,17 +57,17 @@ void setup() {
   Serial.println("TRACK connected");*/
 
   motor1.setMode(FORWARD);
-  motor1.setSmoothSpeed(10);
+  motor1.setSmoothSpeed(25);
   motor2.setMode(FORWARD);
-  motor2.setSmoothSpeed(10);
+  motor2.setSmoothSpeed(25);
   motor3.setMode(FORWARD); 
-  motor3.setSmoothSpeed(10);
+  motor3.setSmoothSpeed(25);
   motor4.setMode(FORWARD);
-  motor4.setSmoothSpeed(10);
+  motor4.setSmoothSpeed(25);
   motor5.setMode(FORWARD);
-  motor5.setSmoothSpeed(10);
+  motor5.setSmoothSpeed(25);
   motor6.setMode(FORWARD);
-  motor6.setSmoothSpeed(10);
+  motor6.setSmoothSpeed(25);
 }
 
 void loop () {
@@ -107,6 +107,8 @@ void loop () {
           number_motor= (map(data.ch[6], 172,1811,0,2)==1) ? 1 : 2;
         }else if (map(data.ch[6], 172,1811,0,2)==0){
           number_motor = (map(data.ch[7], 172,1811,0,2)==0) ? 5 : (map(data.ch[7], 172,1811,0,2)== 1) ? 6 : 7; // 7 - это 5 и 6 одновременно 
+        }else if((map(data.ch[6], 172,1811,0,2)!=0) && (map(data.ch[7], 172,1811,0,2)!=0)) {
+          number_motor = (map(data.ch[8], 172,1811,0,1)==0) ? 3 : 4;
         }else{number_motor =0;}
     
       }
